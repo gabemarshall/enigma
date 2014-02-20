@@ -1,4 +1,4 @@
 enigma
 ======
 
-A ruby command line tool to URL/HTML encode and decode input
+A ruby command line tool to convert strings to and from various encodings

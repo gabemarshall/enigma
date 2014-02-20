@@ -1,114 +1,109 @@
 #!/usr/bin/ruby
-# HTML / URL Encoder/Decoder
+# A command line character encoder/decoder -- results are directly copied to the clipboard
 
+require 'rbconfig'
 require 'cgi'
-require 'open-uri'
+require 'digest/md5'
+require 'base64'
 
-decode_times = ''
+os = Config::CONFIG["arch"]
+$clipboard = false
 
-def html_encode(val)
-	string = CGI.escapeHTML(val)
-	return string
+if /darwin/.match(os)
+	$clipboard = true
 end
 
-def html_decode(val)
-	string = CGI.unescapeHTML(val)
-	return string
-end
+puts "
+,--.                     
+|        o               
+|-   ;-. . ,-: ;-.-. ,-: 
+|    | | | | | | | | | | 
+`--' ' ' ' `-| ' ' ' `-` 
+           `-'         "
+puts "A command line character encoder/decoder\n\n"
 
-def url_encode(val)
-  	string = CGI.escape(val)
-  	return string	
-end
+$go_again_bool = ''
+$value = ''
+$count = 0
+$choice
 
-def url_decode(val)
-	string = CGI.unescape(val)
-	return string
-end
+def print_results(val)
+	result = val.strip
+	puts "\nResult (copied to clipboard): "+result
 
-
-# safely handle the third arguement, which is optional for multiple encoding
-begin 
-	decode_times = ARGV[2]
-rescue 
-end
-
-begin
-	
-	decoder_type = ARGV[0]
-	decoder_value = ARGV[1]
-	
-	case decoder_type
-
-	when '--htmle'
-		
-		if decode_times
-			new_value = decoder_value
-			decode_times = decode_times.to_i
-			(1..decode_times).each do |count|
-				new_value = html_encode(new_value)
-				if count >= decode_times
-					puts new_value
-					system("echo '"+new_value+"' | pbcopy")
-				end
-			end
+	if $clipboard
+		if /%/.match(result) # BUG: printf breaks when printing % characters, so we will use echo instead...which seems to append whitespace at the end no matter what.
+			system("echo #{result} | pbcopy")
 		else
-			puts html_encode(decoder_value)
-			system("echo '"+html_encode(decoder_value)+"' | pbcopy")
-
+			system("printf #{result} | pbcopy")
 		end
-	
-	when '--htmld'
-		puts html_decode(decoder_value)
-		system("echo '"+html_decode(decoder_value)+"' | pbcopy")
 
-	when '--urle'
-		if decode_times
-			decode_times = decode_times.to_i
-			new_value = decoder_value
-			
-			(1..decode_times).each do |count|
-				new_value = url_encode(new_value)
-				if count >= decode_times
-					puts new_value
-					system("echo "+new_value+" | pbcopy")
-				end
+	end
+	exit 1
+end
 
-			end
-		
-		else
-			puts url_encode(decoder_value)
-			system("echo "+url_encode(decoder_value)+" | pbcopy")	
+
+def interactive_mode()
+	def alter_value(choice)
+		case choice
+
+		when "1"
+			$value = CGI.escapeHTML($value)
+			puts "\nCurrent Value: "+$value
+		when "2"
+			$value = CGI.unescapeHTML($value)
+			puts "\nCurrent Value: "+$value
+		when "3"
+			$value = CGI.escape($value)
+			puts "\nCurrent Value: "+$value
+		when "4"
+			$value = CGI.unescape($value)
+			puts "\nCurrent Value: "+$value
+		when "5"
+			$value = Base64.encode64($value)
+			puts "\nCurrent Value: "+$value
+		when "6"
+			$value = Base64.decode64($value)
+			puts "\nCurrent Value: "+$value
+		when "7"
+			$value = Digest::MD5.hexdigest($value)
+			puts "\nCurrent Value: "+$value
 		end
-		
-		
 
-	when '--urld'
-		puts url_decode(decoder_value)
-		system("echo "+url_decode(decoder_value)+" | pbcopy")
 
+
+	puts "\nWould you like to encode/decode this value again? (Y/n)"
+	$go_again_bool = $stdin.gets.chomp
+	$go_again_bool = $go_again_bool.upcase
+
+	if $go_again_bool == 'Y'
+		interactive_mode()
 	else
-		puts "Incorrect syntax, try again or run with --help flag"
-		puts "
-		,--.                     
-		|        o               
-		|-   ;-. . ,-: ;-.-. ,-: 
-		|    | | | | | | | | | | 
-		`--' ' ' ' `-| ' ' ' `-` 
-		           `-'         "
-		puts "A command line character encoder/decoder -- results are directly copied to the clipboard"
-		puts "\n###### Current Commands ######\n\n"
-		puts "Ex: $ ./eni.rb --htmle \'value\' -- HTML Encode"
-		puts "Ex: $ ./eni.rb --htmld \'value\' -- HTML Decode"
-		puts "Ex: $ ./eni.rb --urle \'value\' -- URL Decode"
-		puts "Ex: $ ./eni.rb --urld \'value\' -- URL Decode\n\n"
+		print_results($value)
 	end
 	
-rescue 
+	end
+
+	if $count == 0
+		puts "What value would you like to encode or decode?"
+		$value = $stdin.gets.chomp
+		$count += 1
+	end
+		puts "How would you like to alter: "+$value+" (1-7)"
+		puts "\n\t 1. HTML Encode"
+		puts "\t 2. HTML Decode"
+		puts "\t 3. URL Encode"
+		puts "\t 4. URL Decode"
+		puts "\t 5. Base64 Encode"
+		puts "\t 6. Base64 Decode"
+		puts "\t 7. MD5 Hash\n"
+
+		$choice = $stdin.gets.chomp
+		alter_value($choice)
 	
-	puts "\nError, missing argument."
-	puts "Ex: $ ./eni.rb --htmle \'(\'"
-	puts "Remember, special characters must be escaped via the \\ character\n\n"
-	
+		interactive_decoder_value = $stdin.gets.chomp
+		
+
 end
 
+interactive_mode()
