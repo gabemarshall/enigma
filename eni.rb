@@ -20,10 +20,11 @@ puts "
 |    | | | | | | | | | | 
 `--' ' ' ' `-| ' ' ' `-` 
            `-'         "
-puts "A command line character encoder/decoder\n\n"
+puts "A command line character encoder/decoder\n"
+puts "Usage: ./eni.rb  OR  ./eni.rb 'value' \n\n"
 
 $go_again_bool = ''
-$value = ''
+$value = ARGV[0]
 $count = 0
 $choice
 
@@ -32,12 +33,8 @@ def print_results(val)
 	puts "\nResult (copied to clipboard): "+result
 
 	if $clipboard
-		if /%/.match(result) # BUG: printf breaks when printing % characters, so we will use echo instead...which seems to append whitespace at the end no matter what.
-			system("echo #{result} | pbcopy")
-		else
-			system("printf #{result} | pbcopy")
-		end
-
+		result = result.gsub(/%/, "%%")
+		system("printf #{result} | pbcopy")
 	end
 	exit 1
 end
@@ -84,7 +81,7 @@ def interactive_mode()
 	
 	end
 
-	if $count == 0
+	if $count == 0 && !$value
 		puts "What value would you like to encode or decode?"
 		$value = $stdin.gets.chomp
 		$count += 1
