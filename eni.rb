@@ -34,7 +34,7 @@ def print_results(val)
 
 	if $clipboard
 		result = result.gsub(/%/, "%%")
-		system("printf #{result} | pbcopy")
+		system("printf '"+result+"' | pbcopy")
 	end
 	exit 1
 end
