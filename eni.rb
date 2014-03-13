@@ -77,7 +77,7 @@ def print_results(val)
 		system("printf '"+result+"' | pbcopy")
 	elsif $win
 		puts "\nResult copied to clipboard...Cheers!\n"
-		system("echo '"+result+"' | clip")
+		system("echo "+result+" | clip")
 	else 
 		puts "Cheers!"
 	end
