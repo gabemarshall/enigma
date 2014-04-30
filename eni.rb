@@ -5,6 +5,7 @@ require 'rbconfig'
 require 'cgi'
 require 'digest'
 require 'base64'
+require 'htmlentities'
 
 
 os = Config::CONFIG["arch"]
@@ -47,16 +48,16 @@ if !$win
 ,--.                     
 |        o               
 |-   ;-. . ,-: ;-.-. ,-: 
-|    | | | | | | | | | | 
-`--' ' ' ' `-| ' ' ' `-` 
-           `-'         ".red
+|    | | | | | | | | | |  
+`--' ' ' ' `-| ' ' ' `-`  v1.0
+           `-'         ".green
 else
 	puts "
 ,--.                     
 |        o               
 |-   ;-. . ,-: ;-.-. ,-: 
-|    | | | | | | | | | | 
-`--' ' ' ' `-| ' ' ' `-` 
+|    | | | | | | | | | |  
+`--' ' ' ' `-| ' ' ' `-`  v1.0
            `-'         "
 end
 
@@ -72,7 +73,7 @@ def print_results(val)
 	result = val.strip
 
 	if $mac
-		puts "\nResult copied to clipboard...Cheers!\n"
+		puts "\nResult copied to clipboard...Cheers! 🍻 \n"
 		result = result.gsub(/%/, "%%")
 		system("printf '"+result+"' | pbcopy")
 	elsif $win
@@ -100,20 +101,26 @@ def interactive_mode()
 		when "1"
 			$value = CGI.escapeHTML($value)
 		when "2"
-			$value = CGI.unescapeHTML($value)
+			coder = HTMLEntities.new
+			$value = coder.encode($value, :decimal)
 		when "3"
-			$value = CGI.escape($value)
+			coder = HTMLEntities.new
+			$value = coder.encode($value, :hexadecimal)
 		when "4"
-			$value = CGI.unescape($value)
+			$value = CGI.unescapeHTML($value)
 		when "5"
-			$value = Base64.encode64($value)
+			$value = CGI.escape($value)
 		when "6"
-			$value = Base64.decode64($value)
+			$value = CGI.unescape($value)
 		when "7"
-			$value = Digest::MD5.hexdigest($value)
+			$value = Base64.encode64($value)
 		when "8"
-			$value = Digest::SHA1.hexdigest($value)
+			$value = Base64.decode64($value)
 		when "9"
+			$value = Digest::MD5.hexdigest($value)
+		when "10"
+			$value = Digest::SHA1.hexdigest($value)
+		when "11"
 			$value = Digest::SHA256.hexdigest($value)
 		end
 
@@ -132,20 +139,22 @@ def interactive_mode()
 	end
 
 	if $count == 0 && !$value
-		puts "What value would you like to encode or decode?"
+		puts "What value would you like to alter?"
 		$value = $stdin.gets.chomp
 		$count += 1
 	end
 		puts "How would you like to alter: "+$value+" (1-9)"
-		puts "\n\t 1. HTML Encode"
-		puts "\t 2. HTML Decode"
-		puts "\t 3. URL Encode"
-		puts "\t 4. URL Decode"
-		puts "\t 5. Base64 Encode"
-		puts "\t 6. Base64 Decode"
-		puts "\t 7. MD5 Hash\n"
-		puts "\t 8. SHA1 Hash\n"
-		puts "\t 9. SHA256 Hash\n"
+		puts "\n\t 1. HTML Encode (basic)"
+		puts "\t 2. HTML Encode (decimal)"
+		puts "\t 3. HTML Encode (hexadecimal)"
+		puts "\t 4. HTML Decode"
+		puts "\t 5. URL Encode"
+		puts "\t 6. URL Decode"
+		puts "\t 7. Base64 Encode"
+		puts "\t 8. Base64 Decode"
+		puts "\t 9. MD5 Hash\n"
+		puts "\t 10. SHA1 Hash\n"
+		puts "\t 11. SHA256 Hash\n"
 
 		$choice = $stdin.gets.chomp
 		alter_value($choice)
