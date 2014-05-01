@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'enigma'
+
+eni = Enigma::Eni.new
+eni.interactive_mode
