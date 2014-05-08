@@ -99,21 +99,21 @@ def interactive_mode()
 		case choice
 
 		when "1"
-			$value = CGI.escapeHTML($value)
+			$value = CGI.escape($value)
 		when "2"
 			coder = HTMLEntities.new
-			$value = coder.encode($value, :decimal)
+			$value = CGI.escapeHTML($value)
 		when "3"
 			coder = HTMLEntities.new
-			$value = coder.encode($value, :hexadecimal)
+			$value = coder.encode($value, :decimal)
 		when "4"
-			$value = CGI.unescapeHTML($value)
+			$value = coder.encode($value, :hexadecimal)
 		when "5"
-			$value = CGI.escape($value)
+			$value = Base64.encode64($value)
 		when "6"
 			$value = CGI.unescape($value)
 		when "7"
-			$value = Base64.encode64($value)
+			$value = CGI.unescapeHTML($value)
 		when "8"
 			$value = Base64.decode64($value)
 		when "9"
@@ -143,15 +143,17 @@ def interactive_mode()
 		$value = $stdin.gets.chomp
 		$count += 1
 	end
-		puts "How would you like to alter: "+$value+" (1-9)"
-		puts "\n\t 1. HTML Encode (basic)"
-		puts "\t 2. HTML Encode (decimal)"
-		puts "\t 3. HTML Encode (hexadecimal)"
-		puts "\t 4. HTML Decode"
-		puts "\t 5. URL Encode"
+		puts "How would you like to alter: "+$value+" (1-11)"
+		puts "\n\t 1. URL Encode"
+		puts "\t 2. HTML Encode (basic)"
+		puts "\t 3. HTML Encode (decimal)"
+		puts "\t 4. HTML Encode (hexadecimal)"
+		puts "\t 5. Base64 Encode"
+		puts ""
 		puts "\t 6. URL Decode"
-		puts "\t 7. Base64 Encode"
+		puts "\t 7. HTML Decode"
 		puts "\t 8. Base64 Decode"
+		puts "" 
 		puts "\t 9. MD5 Hash\n"
 		puts "\t 10. SHA1 Hash\n"
 		puts "\t 11. SHA256 Hash\n"
