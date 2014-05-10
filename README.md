@@ -1,10 +1,9 @@
-enigma
+Enigma
 ======
 
 A ruby command line tool to convert strings to and from various encodings.
 
 ### Installation
 
-Clone this repository and install the htmlentities gem
-
-
+1. ```git clone https://github.com/gabemarshall/enigma.git```
+2. ``` bundle install ```
