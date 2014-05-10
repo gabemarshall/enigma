@@ -107,6 +107,7 @@ def interactive_mode()
 			coder = HTMLEntities.new
 			$value = coder.encode($value, :decimal)
 		when "4"
+			coder = HTMLEntities.new
 			$value = coder.encode($value, :hexadecimal)
 		when "5"
 			$value = Base64.encode64($value)
