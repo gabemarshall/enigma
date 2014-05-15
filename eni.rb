@@ -8,7 +8,7 @@ require 'base64'
 require 'htmlentities'
 
 
-os = Config::CONFIG["arch"]
+os = RbConfig::CONFIG["arch"]
 
 $mac = false
 $win = false
