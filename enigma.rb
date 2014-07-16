@@ -1,5 +1,5 @@
 #!/usr/bin/ruby
-# A command line character encoder/decoder -- results are directly copied to the clipboard for windows and mac
+# A command line character encoder/decoder -- results are directly copied to the clipboard
 
 require 'rbconfig'
 require 'cgi'
