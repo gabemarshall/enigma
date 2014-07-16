@@ -88,6 +88,7 @@ def print_results(val)
 		system("echo "+result+" | clip")
 	else 
 		puts "\nResult copied to clipboard...Cheers!\n"
+		result = result.gsub(/%/, "%%")
 		system("printf '"+result+"' | xclip -selection clipboard")
 	end
 	exit 1
