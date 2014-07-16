@@ -5,7 +5,14 @@ require 'rbconfig'
 require 'cgi'
 require 'digest'
 require 'base64'
-require 'htmlentities'
+
+begin
+	require 'htmlentities'
+rescue LoadError
+  puts "Hmm...htmlentities gem was not found."
+  puts "If this is your first time, be sure to run bundle install or gem install htmlentities."
+  exit
+end
 
 
 os = RbConfig::CONFIG["arch"]
