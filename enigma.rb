@@ -80,7 +80,7 @@ def print_results(val)
 	result = val.strip
 
 	if $mac
-		puts "\nResult copied to clipboard...Cheers!\n"
+		puts "\nResult is copied to clipboard...Cheers!\n"
 		result = result.gsub(/%/, "%%")
 		system("printf '"+result+"' | pbcopy")
 	elsif $win
@@ -95,10 +95,12 @@ def print_results(val)
 end
 
 def print_current(val)
+	result_len = val.length
+	result_len = result_len.to_s
 	if !$win
-		puts "\nResult: "+$value.yellow
+		puts "\nResult: "+$value.yellow+" (#{result_len} characters long)"
 	else
-		puts "\nResult: "+$value
+		puts "\nResult: "+$value+" (#{result_len} characters long)"
 	end
 end
 
