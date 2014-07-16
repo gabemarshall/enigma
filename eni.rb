@@ -73,14 +73,15 @@ def print_results(val)
 	result = val.strip
 
 	if $mac
-		puts "\nResult copied to clipboard...Cheers! 🍻 \n"
+		puts "\nResult copied to clipboard...Cheers!\n"
 		result = result.gsub(/%/, "%%")
 		system("printf '"+result+"' | pbcopy")
 	elsif $win
 		puts "\nResult copied to clipboard...Cheers!\n"
 		system("echo "+result+" | clip")
 	else 
-		puts "Cheers!"
+		puts "\nResult copied to clipboard...Cheers!\n"
+		system("printf '"+result+"' | xclip -selection clipboard")
 	end
 	exit 1
 end
