@@ -111,6 +111,7 @@ def interactive_mode()
 
 		when "1"
 			$value = CGI.escape($value)
+			$value = $value.gsub(/\+/, "%20") # Make sure url encoded spaces are %20 instead of +
 		when "2"
 			coder = HTMLEntities.new
 			$value = CGI.escapeHTML($value)
