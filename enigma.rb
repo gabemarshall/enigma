@@ -50,13 +50,17 @@ if !$win
 	  def yellow
 	    colorize(33)
 	  end
+
+	  def blue
+	  	colorize(34)
+	  end
 	end
 	puts "
 ,--.                     
 |        o               
 |-   ;-. . ,-: ;-.-. ,-: 
 |    | | | | | | | | | |  
-`--' ' ' ' `-| ' ' ' `-`  v1.01
+`--' ' ' ' `-| ' ' ' `-`  v1.1
            `-'         ".green
 else
 	puts "
@@ -64,7 +68,7 @@ else
 |        o               
 |-   ;-. . ,-: ;-.-. ,-: 
 |    | | | | | | | | | |  
-`--' ' ' ' `-| ' ' ' `-`  v1.01
+`--' ' ' ' `-| ' ' ' `-`  v1.1
            `-'         "
 end
 
@@ -130,10 +134,14 @@ def interactive_mode()
 		when "8"
 			$value = Base64.decode64($value)
 		when "9"
-			$value = Digest::MD5.hexdigest($value)
+			$value = $value.unpack('B*').join("")
 		when "10"
-			$value = Digest::SHA1.hexdigest($value)
+			$value = $value.scan(/.{1,8}/).collect{|x| x.to_i(2).chr}.join("")
 		when "11"
+			$value = Digest::MD5.hexdigest($value)
+		when "12"
+			$value = Digest::SHA1.hexdigest($value)
+		when "13"
 			$value = Digest::SHA256.hexdigest($value)
 		end
 
@@ -156,27 +164,38 @@ def interactive_mode()
 		$value = $stdin.gets.chomp
 		$count += 1
 	end
-		puts "How would you like to alter: "+$value+" (1-11)"
-		puts "\n\t 1. URL Encode"
-		puts "\t 2. HTML Encode (basic)"
-		puts "\t 3. HTML Encode (decimal)"
-		puts "\t 4. HTML Encode (hexadecimal)"
-		puts "\t 5. Base64 Encode"
+		puts "How would you like to alter: #{$value} (1-11)"
+		if !$win
+			print "\n\t\t\#\# Encodings \#\#".blue
+		else
+			print "\n\t\t\#\# Encodings \#\#"
+		end
+		puts "\n1. URL Encode \t\t\t 6. URL Decode"
+		puts "2. HTML Encode (basic) \t\t 7. HTML Decode"
+		puts "3. HTML Encode (decimal) \t ---"
+		puts "4. HTML Encode (hexadecimal) \t ---"
+		puts "5. Base64 Encode \t\t 8. Base64 Decode"
+		if !$win
+			print "\n\t\t\#\# Conversions \#\#".blue
+		else
+			print "\n\t\t\#\# Conversions \#\#"
+		end
 		puts ""
-		puts "\t 6. URL Decode"
-		puts "\t 7. HTML Decode"
-		puts "\t 8. Base64 Decode"
-		puts "" 
-		puts "\t 9. MD5 Hash\n"
-		puts "\t 10. SHA1 Hash\n"
-		puts "\t 11. SHA256 Hash\n"
+		puts "9. ASCII to Binary \t\t 10. Binary to ASCII"
+		if !$win
+			print "\n\t\t\#\# Hashing \#\#".blue
+		else
+			print "\n\t\t\#\# Hashing \#\#"
+		end
+		puts ""
+		puts "11. MD5 Hash\n"
+		puts "12. SHA1 Hash\n"
+		puts "13. SHA256 Hash\n"
 
 		$choice = $stdin.gets.chomp
 		alter_value($choice)
 	
 		interactive_decoder_value = $stdin.gets.chomp
-		
-
 end
 
 interactive_mode()
