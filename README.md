@@ -3,6 +3,9 @@ Enigma
 
 A ruby command line tool to convert strings to and from various encodings.
 
+![Alt text](http://blog.gabemarshall.me/content/images/2014/May/enigma.png "Activities")
+
+
 ### Changelog
 
 Ver 1.1
