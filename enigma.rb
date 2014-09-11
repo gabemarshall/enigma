@@ -5,6 +5,7 @@ require 'rbconfig'
 require 'cgi'
 require 'digest'
 require 'base64'
+require 'optparse'
 
 begin
 	require 'htmlentities'
@@ -73,14 +74,16 @@ else
 end
 
 puts "A command line character encoder/decoder\n"
-puts "Usage: ./eni.rb  OR  ./eni.rb 'value' \n\n"
+puts "Usage: ./enigma.rb  OR  ./enigma.rb 'value' \n\n"
 
 $go_again_bool = ''
 $value = ARGV[0]
 $count = 0
 $choice
+interactive = true
 
 def print_results(val)
+	puts val
 	result = val.strip
 
 	if $mac
@@ -102,9 +105,9 @@ def print_current(val)
 	result_len = val.length
 	result_len = result_len.to_s
 	if !$win
-		puts "\nResult: "+$value.yellow+" (#{result_len} characters long)"
+		puts "\nResult: "+val.yellow+" (#{result_len} characters long)"
 	else
-		puts "\nResult: "+$value+" (#{result_len} characters long)"
+		puts "\nResult: "+val+" (#{result_len} characters long)"
 	end
 end
 
@@ -198,4 +201,19 @@ def interactive_mode()
 		interactive_decoder_value = $stdin.gets.chomp
 end
 
-interactive_mode()
+options = {}
+
+OptionParser.new do |opts|
+  opts.on("--urle VALUE", "--ue", "URL Encode") do |value|
+    value = CGI.escape(value)
+	value = value.gsub(/\+/, "%20") # Make sure url encoded spaces are %20 instead of +
+    print_current(value)
+    print_results(value)
+    interactive = false
+  end
+end.parse!
+
+
+if interactive
+	interactive_mode()
+end
