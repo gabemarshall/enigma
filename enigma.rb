@@ -169,7 +169,7 @@ def interactive_mode()
 	end
 		puts "How would you like to alter: #{$value} (1-11)"
 		if !$win
-			print "\n\t\t\#\# Encodings \#\#".blue
+			print "\n\t\t\#\# Encodings \#\#".green
 		else
 			print "\n\t\t\#\# Encodings \#\#"
 		end
@@ -179,14 +179,14 @@ def interactive_mode()
 		puts "4. HTML Encode (hexadecimal) \t ---"
 		puts "5. Base64 Encode \t\t 8. Base64 Decode"
 		if !$win
-			print "\n\t\t\#\# Conversions \#\#".blue
+			print "\n\t\t\#\# Conversions \#\#".green
 		else
 			print "\n\t\t\#\# Conversions \#\#"
 		end
 		puts ""
 		puts "9. ASCII to Binary \t\t 10. Binary to ASCII"
 		if !$win
-			print "\n\t\t\#\# Hashing \#\#".blue
+			print "\n\t\t\#\# Hashing \#\#".green
 		else
 			print "\n\t\t\#\# Hashing \#\#"
 		end
