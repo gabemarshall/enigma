@@ -1,6 +1,5 @@
 #!/usr/bin/ruby
 # A command line character encoder/decoder -- results are directly copied to the clipboard
-# flag14:c0e2ccfd5019f9a165763678833a27be
 
 require 'rbconfig'
 require 'cgi'
